@@ -10,7 +10,7 @@ public class EmailSender implements Sender {
 	@Override
 	public void send(InputOutput io, String message) {
 		String emailAddress = io.readPredicate("Enter email address", "Wrong email", EmailSender::emailPredicate);
-		System.out.printf("message: '%s' has been sent to email address: %s\n", message, emailAddress);
+		io.writeLine(String.format("message: '%s' has been sent to email address: %s\n", message, emailAddress));
 	}
 
 	private static boolean emailPredicate(String email) {

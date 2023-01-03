@@ -11,7 +11,7 @@ public class TcpSender implements Sender {
 	public void send(InputOutput io, String message) {
 		String ipAddress = io.readPredicate("Enter IP address", "Wrong IP address", TcpSender::ipV4Predicate);
 		int port = io.readInt("Enter port number", "Wrong port number", 1024, 49151);
-		System.out.printf("message: '%s' has been sent to tcp address: %s:%d\n", message, ipAddress, port);
+		io.writeLine(String.format("message: '%s' has been sent to tcp address: %s:%d\n", message, ipAddress, port));
 	}
 
 	private static boolean ipV4Predicate(String ip) {

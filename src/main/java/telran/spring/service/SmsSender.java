@@ -11,7 +11,7 @@ public class SmsSender implements Sender {
 	public void send(InputOutput io, String message) {
 		String phoneNumber = io.readPredicate("Enter phone number", "Wrong phone number",
 				SmsSender::phoneNumberPredicate);
-		System.out.printf("message: '%s' has been sent to phone number: %s\n", message, phoneNumber);
+		io.writeLine(String.format("message: '%s' has been sent to phone number: %s\n", message, phoneNumber));
 	}
 
 	private static boolean phoneNumberPredicate(String phone) {
