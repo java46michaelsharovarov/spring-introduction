@@ -1,9 +1,9 @@
 package telran.spring.service;
 
-import telran.spring.view.InputOutput;
+import telran.spring.dto.Message;
 
 public interface Sender {
 	
-	void send(InputOutput io, String message);
+	String send(Message message);
 	
 }
