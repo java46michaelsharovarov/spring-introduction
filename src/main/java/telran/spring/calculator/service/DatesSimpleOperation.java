@@ -44,4 +44,23 @@ public class DatesSimpleOperation implements Operation {
 		return String.format("%s %s %d days = %s", operationData.date, operationData.additionalData, operationData.days, res);
 	}
 	
+	/****************solution by Granovsky********************/
+	
+//	@Override
+//	public String execute(OperationData data) {
+//		String res = "";
+//		DateDaysOperationData dateData = (DateDaysOperationData) data;
+//		try {
+//			LocalDate date = LocalDate.parse(dateData.date);
+//			int days = dateData.days;
+//			if(data.additionalData.equalsIgnoreCase("before")) {
+//				days = -days;
+//			}
+//			res = date.plusDays(days).toString();
+//		} catch (Exception e) {
+//			res = "Wrong Date format should be YYYY-MM-DD";
+//		} 		
+//		return res;
+//	}
+	
 }

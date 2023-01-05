@@ -40,5 +40,26 @@ public class ArithmeticSimpleOperation implements Operation {
 		}
 		return String.format("%.1f %s %.1f = %s", operationData.operand1, operationData.additionalData, operationData.operand2, res);
 	}
+	
+	/****************solution by Granovsky********************/
+	
+//	private static Map<String, BiFunction<Double, Double, String>> operations;
+//	static {
+//		operations = new HashMap<>();
+//		operations.put("*", (o1, o2) -> o1 * o2 + "");
+//		operations.put("-", (o1, o2) -> o1 - o2 + "");
+//		operations.put("+", (o1, o2) -> o1 + o2 + "");
+//		operations.put("/", (o1, o2) -> o1 / o2 + "");
+//		
+//	}
+//		@Override
+//		public String execute(OperationData data) {
+//			ArithmeticOperationData arithmeticData = (ArithmeticOperationData) data;
+//			var function = operations.getOrDefault(data.additionalData,
+//					(o1, o2) -> "Wrong arithmetic operation should be (*,/,+,-");
+//			return function.apply(arithmeticData.operand1, arithmeticData.operand2);
+//		}
+
+	
 
 }
