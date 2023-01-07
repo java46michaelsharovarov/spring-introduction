@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,24 +40,20 @@ public class CalculatorController {
 	}
 	
 	@GetMapping
-	private Set<String> getTypes() {
-		return operations.keySet();
+	private Map<String, Set<String>> getOperations() {
+		return operations.keySet().stream().collect(Collectors.toMap(Function.identity(), k -> {
+			 Map<String, ? extends Object> methods = operations.get(k).getMethods();
+					if(methods == null) {
+					return Set.of("no methods available");	
+					}
+					return methods.keySet();
+		}));
 	}
 	
 	@PostConstruct
 	void displayTypes() {
-		operations = operationsList.stream().collect(Collectors.toMap(o -> getAnnotationValue(o), Function.identity()));
+		operations = operationsList.stream().collect(Collectors.toMap(Operation::getOperationName, Function.identity()));
 		System.out.printf("application context is created with types %s%n", operations.keySet());
-	}
-	
-	private String getAnnotationValue(Operation o){
-		Class<? extends Operation> clazz = o.getClass();
-		String annotationVal = clazz.getDeclaredAnnotation(Service.class).value();
-		if(annotationVal.isEmpty()) {
-			throw new RuntimeException("no @Service annotation value");
-//			return clazz.getSimpleName().replace("Operation", "");
-		}
-		return annotationVal;
 	}
 
 	@PreDestroy
