@@ -1,13 +1,26 @@
 package telran.spring.calculator;
 
+import java.util.Scanner;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class CalculatorAppl {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CalculatorAppl.class, args);
+		ConfigurableApplicationContext ct = SpringApplication.run(CalculatorAppl.class, args);
+		try (Scanner scanner = new Scanner(System.in)) {
+			while(true) {
+				System.out.println("for server shutdown type 'exit'");
+				String input = scanner.nextLine();
+				if(input.equalsIgnoreCase("exit")) {
+					break;
+				}
+			}
+		}
+		ct.close();
 	}
 	
 }

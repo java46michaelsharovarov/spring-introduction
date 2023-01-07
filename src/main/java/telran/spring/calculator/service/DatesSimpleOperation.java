@@ -1,66 +1,46 @@
 package telran.spring.calculator.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.function.BiFunction;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import lombok.Getter;
 import telran.spring.calculator.dto.DateDaysOperationData;
 import telran.spring.calculator.dto.OperationData;
-import telran.spring.calculator.service.annotations.OperatorSign;
 
-@Getter
-@Service("dates operations")
+@Service
+//("dates operations")
 public class DatesSimpleOperation implements Operation {
-	
-	private Map<String, Method> methods;
 
-	public DatesSimpleOperation() {
-		this.methods = Arrays.stream(DatesSimpleOperationMethods.class.getDeclaredMethods())
-				.collect(Collectors.toMap(m -> m.getAnnotation(OperatorSign.class).value(), Function.identity()));
+	@Value("${app.message.wrong.date.operation: wrong date operation}")
+	String wrongDateOperation;
+	@Value("${app.message.mismath.data: data mismatch with operation type}")
+	String mismmatchOperationWithData;	
+	private static Map<String, BiFunction<LocalDate, Integer, String>> operations;
+	
+	static {
+		operations = new HashMap<>();
+		operations.put("+", (date, days) -> date.plusDays(days).toString());
+		operations.put("-", (date, days) -> date.minusDays(days).toString());
 	}
 
 	@Override
-	public String execute(OperationData data) {
-		DateDaysOperationData operationData = (DateDaysOperationData) data;
-		LocalDate date = LocalDate.parse(operationData.date, DateTimeFormatter.ISO_LOCAL_DATE);
-		String res = null;
-		Method method = methods.get(operationData.additionalData);
-		if(method == null) {
-			return String.format("'%s' - no such method", operationData.additionalData);
-		}
+	public String execute(OperationData operationData) {
+		DateDaysOperationData data;
 		try {
-			res = (String) method.invoke(null, date, operationData.days);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+			data = (DateDaysOperationData) operationData;
+		} catch (Exception e) {
+			return String.format(mismmatchOperationWithData);
 		}
-		return String.format("%s %s %d days = %s", operationData.date, operationData.additionalData, operationData.days, res);
+		LocalDate setDate = LocalDate.parse(data.date);
+		var method = operations.getOrDefault(data.additionalData, 
+				(date, days) -> String.format("'%s' - %s %s", data.additionalData, wrongDateOperation, operations.keySet()));
+		var res = method.apply(setDate, data.days);		
+		return res.contains(operations.keySet().toString()) 
+				? res : String.format("%s %s %d days = %s", data.date, data.additionalData, data.days, res);
 	}
-	
-	/****************solution by Granovsky********************/
-	
-//	@Override
-//	public String execute(OperationData data) {
-//		String res = "";
-//		DateDaysOperationData dateData = (DateDaysOperationData) data;
-//		try {
-//			LocalDate date = LocalDate.parse(dateData.date);
-//			int days = dateData.days;
-//			if(data.additionalData.equalsIgnoreCase("before")) {
-//				days = -days;
-//			}
-//			res = date.plusDays(days).toString();
-//		} catch (Exception e) {
-//			res = "Wrong Date format should be YYYY-MM-DD";
-//		} 		
-//		return res;
-//	}
 	
 }

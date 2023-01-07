@@ -1,37 +1,33 @@
 package telran.spring.calculator.service;
 
-import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import telran.spring.calculator.dto.DatesOperationData;
 import telran.spring.calculator.dto.OperationData;
 
-@Service("between dates")
+@Service
+//("between dates")
 public class DatesBetweenOperation implements Operation {
+	
+	@Value("${app.message.mismath.data: data mismatch with operation type}")
+	String mismmatchOperationWithData;
 
 	@Override
-	public String execute(OperationData data) {
-		DatesOperationData operationData = (DatesOperationData) data;
-		LocalDate dateFrom;
-		LocalDate dateTo;
+	public String execute(OperationData operationData) {
+		DatesOperationData data;
 		try {
-			dateFrom = LocalDate.parse(operationData.dateFrom, DateTimeFormatter.ISO_LOCAL_DATE);
-			dateTo = LocalDate.parse(operationData.dateTo, DateTimeFormatter.ISO_LOCAL_DATE);
+			data = (DatesOperationData) operationData;
 		} catch (Exception e) {
-			return "date format should be - 'yyyy-mm-dd'";
-		}
+			return String.format(mismmatchOperationWithData);
+		}	
+		LocalDate dateFrom = LocalDate.parse(data.dateFrom);
+		LocalDate dateTo = LocalDate.parse(data.dateTo);		
 		return String.format("between %s - %s number of days %d", 
 				dateFrom, dateTo, ChronoUnit.DAYS.between(dateFrom, dateTo));
-	}
-
-	@Override
-	public Map<String, Method> getMethods() {
-		return null;
 	}
 
 }
