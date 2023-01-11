@@ -19,7 +19,9 @@ public class DatesBetweenOperation extends AbstractOperation {
 		DatesOperationData data;
 		try {
 			data = (DatesOperationData) operationData;
+			LOG.debug("Executed : {}", mapper.writeValueAsString(data));
 		} catch (Exception e) {
+			LOG.error(mismatchOperationWithData);
 			return String.format(mismatchOperationWithData);
 		}	
 		LocalDate dateFrom = LocalDate.parse(data.dateFrom);

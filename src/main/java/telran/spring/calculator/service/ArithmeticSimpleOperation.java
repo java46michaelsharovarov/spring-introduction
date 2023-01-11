@@ -26,29 +26,32 @@ public class ArithmeticSimpleOperation extends AbstractOperation {
 		methods.put("+", (o1, o2) -> o1 + o2 + "");
 		methods.put("/", (o1, o2) -> {return o2 != 0 ? (o1 / o2) + "" : "division by zero";});
 	}
-		@Override
-		public String execute(OperationData operationData) {
-			ArithmeticOperationData data;
-			try {
-				data = (ArithmeticOperationData) operationData;
-			} catch (Exception e) {
-				return String.format(mismatchOperationWithData);
-			}
-			var method = methods.getOrDefault(data.additionalData,
-					(o1, o2) -> String.format("'%s' - %s %s", data.additionalData, wrongArithmeticOperation, methods.keySet()));
-			var res = method.apply(data.operand1, data.operand2);
-			return res.contains(methods.keySet().toString()) 
-					?  res : String.format("%.1f %s %.1f = %s", data.operand1, data.additionalData, data.operand2, res);
+	
+	@Override
+	public String execute(OperationData operationData) {
+		ArithmeticOperationData data;
+		try {
+			data = (ArithmeticOperationData) operationData;
+			LOG.debug("Executed : {}", mapper.writeValueAsString(data));
+		} catch (Exception e) {
+			LOG.error(mismatchOperationWithData);
+			return String.format(mismatchOperationWithData);
 		}
-		
-		@Override
-		public String getOperationName() {
-			return this.operationName;
-		}
+		var method = methods.getOrDefault(data.additionalData,
+				(o1, o2) -> String.format("'%s' - %s %s", data.additionalData, wrongArithmeticOperation, methods.keySet()));
+		var res = method.apply(data.operand1, data.operand2);
+		return res.contains(methods.keySet().toString()) 
+				?  res : String.format("%.1f %s %.1f = %s", data.operand1, data.additionalData, data.operand2, res);
+	}
+	
+	@Override
+	public String getOperationName() {
+		return this.operationName;
+	}
 
-		@Override
-		public Set<String> getMethodNames() {
-			return methods.keySet();
-		}
+	@Override
+	public Set<String> getMethodNames() {
+		return methods.keySet();
+	}
 
 }

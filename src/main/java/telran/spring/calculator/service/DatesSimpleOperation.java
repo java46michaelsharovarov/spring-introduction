@@ -31,7 +31,9 @@ public class DatesSimpleOperation extends AbstractOperation {
 		DateDaysOperationData data;
 		try {
 			data = (DateDaysOperationData) operationData;
+			LOG.debug("Executed : {}", mapper.writeValueAsString(data));
 		} catch (Exception e) {
+			LOG.error(mismatchOperationWithData);
 			return String.format(mismatchOperationWithData);
 		}
 		LocalDate setDate = LocalDate.parse(data.date);

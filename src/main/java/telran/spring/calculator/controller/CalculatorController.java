@@ -6,12 +6,16 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -23,6 +27,8 @@ import telran.spring.calculator.service.Operation;
 @RequestMapping("calculator")
 public class CalculatorController {
 	
+	static Logger LOG = LoggerFactory.getLogger(CalculatorController.class);
+	ObjectMapper mapper = new ObjectMapper();
 	@Value("${app.message.wrong.operation: wrong operation - }")
 	String wrongOperationMessage;
 	List<Operation> operationsList;
@@ -33,9 +39,14 @@ public class CalculatorController {
 	}
 
 	@PostMapping
-	private String calculate(@RequestBody @Valid OperationData data) {
+	private String calculate(@RequestBody @Valid OperationData data) throws Exception {
+		LOG.debug("RequestBody : {}", mapper.writeValueAsString(data));
 		Operation operation = operations.get(data.operationName);
-		return operation != null ? operation.execute(data) : wrongOperationMessage + data.operationName;
+		if(operation == null) {
+			LOG.error("ERROR: {}", wrongOperationMessage + data.operationName);
+			return wrongOperationMessage + data.operationName;
+		}
+		return operation.execute(data); 
 	}
 	
 	@GetMapping
@@ -52,12 +63,12 @@ public class CalculatorController {
 	@PostConstruct
 	void displayTypes() {
 		operations = operationsList.stream().collect(Collectors.toMap(Operation::getOperationName, Function.identity()));
-		System.out.printf("application context is created with types %s%n", operations.keySet());
+		LOG.info("application context is created with types {}", operations.keySet());
 	}
 
 	@PreDestroy
 	void shutdown() {
-		System.out.println("Bye, performed graceful shutdown");
+		LOG.info("Bye, performed graceful shutdown");
 	}
 
 }
