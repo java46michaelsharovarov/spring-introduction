@@ -2,6 +2,8 @@ package telran.spring.controller;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.annotation.PostConstruct;
@@ -14,6 +16,7 @@ import telran.spring.service.Sender;
 @RequestMapping("messages")
 public class MessageSender {
 	
+	static Logger LOG = LoggerFactory.getLogger(MessageSender.class);
 	Map<String, Sender> senders;
 
 	public MessageSender(Map<String, Sender> senders) {
@@ -22,6 +25,7 @@ public class MessageSender {
 
 	@PostMapping
 	String sendMessage(@RequestBody @Valid Message message) {
+		LOG.debug("received request for sending text: {}, sender type: {}", message.text, message.type);
 		Sender sender = senders.get(message.type);
 		return sender != null ? sender.send(message) : "Wrong type " + message.type;
 	}
@@ -33,12 +37,12 @@ public class MessageSender {
 	
 	@PostConstruct
 	void displayTypes() {
-		System.out.printf("application context is created with types %s%n", senders.keySet());
+		LOG.info("application context is created with types {}", senders.keySet());
 	}
 	
 	@PreDestroy
 	void shutdown() {
-		System.out.println("Bye, performed graceful shutdown");
+		LOG.info("Bye, performed graceful shutdown");
 	}
 
 }
