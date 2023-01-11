@@ -3,6 +3,7 @@ package telran.spring.calculator.service;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -12,13 +13,11 @@ import telran.spring.calculator.dto.DateDaysOperationData;
 import telran.spring.calculator.dto.OperationData;
 
 @Service
-public class DatesSimpleOperation implements Operation {
+public class DatesSimpleOperation extends AbstractOperation {
 
 	private String operationName = "dates operations";
 	@Value("${app.message.wrong.date.operation: wrong date operation}")
 	String wrongDateOperation;
-	@Value("${app.message.mismath.data: data mismatch with operation type}")
-	String mismmatchOperationWithData;	
 	private static Map<String, BiFunction<LocalDate, Integer, String>> methods;
 	
 	static {
@@ -33,7 +32,7 @@ public class DatesSimpleOperation implements Operation {
 		try {
 			data = (DateDaysOperationData) operationData;
 		} catch (Exception e) {
-			return String.format(mismmatchOperationWithData);
+			return String.format(mismatchOperationWithData);
 		}
 		LocalDate setDate = LocalDate.parse(data.date);
 		var method = methods.getOrDefault(data.additionalData, 
@@ -49,8 +48,8 @@ public class DatesSimpleOperation implements Operation {
 	}
 
 	@Override
-	public Map<String, BiFunction<LocalDate, Integer, String>> getMethods() {
-		return methods;
+	public Set<String> getMethodNames() {
+		return methods.keySet();
 	}
 	
 }

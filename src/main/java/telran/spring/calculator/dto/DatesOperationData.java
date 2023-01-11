@@ -6,11 +6,11 @@ import jakarta.validation.constraints.Pattern;
 public class DatesOperationData extends OperationData {
 
 	@NotNull
-	@Pattern(regexp = "\\d{4}-(0\\d|1[012])-(0\\d|[12]\\d|3[01])")
+	@Pattern(regexp = DATE_PATTERN)
 	public String dateFrom;
 	
 	@NotNull
-	@Pattern(regexp = "\\d{4}-(0\\d|1[012])-(0\\d|[12]\\d|3[01])")
+	@Pattern(regexp = DATE_PATTERN)
 	public String dateTo;
 	
 }

@@ -2,21 +2,17 @@ package telran.spring.calculator.service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import telran.spring.calculator.dto.DatesOperationData;
 import telran.spring.calculator.dto.OperationData;
 
 @Service
-public class DatesBetweenOperation implements Operation {
+public class DatesBetweenOperation extends AbstractOperation {
 	
 	private String operationName = "between dates";
-	@Value("${app.message.mismath.data: data mismatch with operation type}")
-	String mismmatchOperationWithData;
 
 	@Override
 	public String execute(OperationData operationData) {
@@ -24,7 +20,7 @@ public class DatesBetweenOperation implements Operation {
 		try {
 			data = (DatesOperationData) operationData;
 		} catch (Exception e) {
-			return String.format(mismmatchOperationWithData);
+			return String.format(mismatchOperationWithData);
 		}	
 		LocalDate dateFrom = LocalDate.parse(data.dateFrom);
 		LocalDate dateTo = LocalDate.parse(data.dateTo);		
@@ -38,7 +34,7 @@ public class DatesBetweenOperation implements Operation {
 	}
 
 	@Override
-	public Map<String, BiFunction<Double, Double, String>> getMethods() {
+	public Set<String> getMethodNames() {
 		return null;
 	}
 

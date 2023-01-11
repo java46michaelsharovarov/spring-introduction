@@ -1,12 +1,12 @@
 package telran.spring.calculator.dto;
 
-import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
 
 public class ArithmeticOperationData extends OperationData {
 
-	@Digits(fraction = 3, integer = 15)
-	public double operand1;
+	@NotNull
+	public Double operand1;
 	
-	@Digits(fraction = 3, integer = 15)
-	public double operand2;
+	@NotNull
+	public Double operand2;
 }

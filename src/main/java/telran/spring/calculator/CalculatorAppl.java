@@ -13,9 +13,9 @@ public class CalculatorAppl {
 		ConfigurableApplicationContext ct = SpringApplication.run(CalculatorAppl.class, args);
 		try (Scanner scanner = new Scanner(System.in)) {
 			while(true) {
-				System.out.println("for server shutdown type 'exit'");
-				String input = scanner.nextLine();
-				if(input.equalsIgnoreCase("exit")) {
+				System.out.println("for server shutdown type 'exit'");				
+				String line = scanner.nextLine();				
+				if(line.equalsIgnoreCase("exit")) {
 					break;
 				}
 			}

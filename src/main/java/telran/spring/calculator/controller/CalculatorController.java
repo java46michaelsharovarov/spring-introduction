@@ -19,7 +19,6 @@ import jakarta.validation.Valid;
 import telran.spring.calculator.dto.OperationData;
 import telran.spring.calculator.service.Operation;
 
-
 @RestController
 @RequestMapping("calculator")
 public class CalculatorController {
@@ -42,11 +41,11 @@ public class CalculatorController {
 	@GetMapping
 	private Map<String, Set<String>> getOperations() {
 		return operations.keySet().stream().collect(Collectors.toMap(Function.identity(), k -> {
-			 Map<String, ? extends Object> methods = operations.get(k).getMethods();
+			  Set<String> methods = operations.get(k).getMethodNames();
 					if(methods == null) {
 					return Set.of("no methods available");	
 					}
-					return methods.keySet();
+					return methods;
 		}));
 	}
 	

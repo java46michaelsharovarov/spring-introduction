@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Positive;
 public class DateDaysOperationData extends OperationData {
 
 	@NotNull
-	@Pattern(regexp = "\\d{4}-(0\\d|1[012])-(0\\d|[12]\\d|3[01])")
+	@Pattern(regexp = DATE_PATTERN)
 	public String date;
 	
 	@Positive

@@ -1,15 +1,15 @@
 package telran.spring.calculator.service;
 
-import java.util.Map;
+import java.util.Set;
 
 import telran.spring.calculator.dto.OperationData;
 
 public interface Operation {
 	
-	Map<String, ? extends Object> getMethods();
+	Set<String> getMethodNames();
 
 	String execute(OperationData data);
 	
-	String getOperationName();
+	String getOperationName(); 
 	
 }

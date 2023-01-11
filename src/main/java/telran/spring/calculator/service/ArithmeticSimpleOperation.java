@@ -2,6 +2,7 @@ package telran.spring.calculator.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -11,13 +12,11 @@ import telran.spring.calculator.dto.ArithmeticOperationData;
 import telran.spring.calculator.dto.OperationData;
 
 @Service
-public class ArithmeticSimpleOperation implements Operation {
+public class ArithmeticSimpleOperation extends AbstractOperation {
 
 	private String operationName = "arithmetic operations";
 	@Value("${app.message.wrong.arithmetic.operation: wrong arithmetic operation}")
 	String wrongArithmeticOperation;
-	@Value("${app.message.mismath.data: data mismatch with operation type}")
-	String mismmatchOperationWithData;
 	private static Map<String, BiFunction<Double, Double, String>> methods;
 	
 	static {
@@ -33,7 +32,7 @@ public class ArithmeticSimpleOperation implements Operation {
 			try {
 				data = (ArithmeticOperationData) operationData;
 			} catch (Exception e) {
-				return String.format(mismmatchOperationWithData);
+				return String.format(mismatchOperationWithData);
 			}
 			var method = methods.getOrDefault(data.additionalData,
 					(o1, o2) -> String.format("'%s' - %s %s", data.additionalData, wrongArithmeticOperation, methods.keySet()));
@@ -48,8 +47,8 @@ public class ArithmeticSimpleOperation implements Operation {
 		}
 
 		@Override
-		public Map<String, BiFunction<Double, Double, String>> getMethods() {
-			return ArithmeticSimpleOperation.methods;
+		public Set<String> getMethodNames() {
+			return methods.keySet();
 		}
 
 }
