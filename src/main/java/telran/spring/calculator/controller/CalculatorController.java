@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +28,9 @@ import telran.spring.calculator.service.Operation;
 @RequestMapping("calculator")
 public class CalculatorController {
 	
-	static Logger LOG = LoggerFactory.getLogger(CalculatorController.class);
-	ObjectMapper mapper = new ObjectMapper();
+	Logger LOG = LoggerFactory.getLogger(CalculatorController.class);
+	@Autowired
+	ObjectMapper mapper;
 	@Value("${app.message.wrong.operation: wrong operation - }")
 	String wrongOperationMessage;
 	List<Operation> operationsList;
