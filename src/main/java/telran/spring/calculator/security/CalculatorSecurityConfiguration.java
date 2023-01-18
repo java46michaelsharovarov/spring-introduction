@@ -13,13 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import telran.spring.calculator.controller.CalculatorController;
-
 @Configuration
 @EnableWebSecurity
 public class CalculatorSecurityConfiguration {
 
-	Logger LOG = LoggerFactory.getLogger(CalculatorController.class);
+	Logger LOG = LoggerFactory.getLogger(CalculatorSecurityConfiguration.class);
 	
 	@Bean
 	SecurityFilterChain configure(HttpSecurity http) throws Exception {
