@@ -7,10 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import telran.spring.calculator.dto.ArithmeticOperationData;
 import telran.spring.calculator.dto.DateDaysOperationData;
 import telran.spring.calculator.dto.DatesOperationData;
+import telran.spring.calculator.security.CalculatorSecurityConfiguration;
 import telran.spring.calculator.service.*;
 
 @SpringBootTest
@@ -24,6 +28,12 @@ class CalculatorServicesTests {
 	private static final String MULTIPLICATIONS = "*";
 	private static final String BETWEEN_DATES = "between dates";
 	private static final String ARITHMETIC_OPERATIONS = "arithmetic operations";
+	@MockBean
+	CalculatorSecurityConfiguration configuration;
+	@MockBean
+	PasswordEncoder encoder;
+	@MockBean
+	UserDetailsService service;
 	@Autowired
 	ArithmeticSimpleOperation arithmeticSimpleOperation;
 	@Autowired

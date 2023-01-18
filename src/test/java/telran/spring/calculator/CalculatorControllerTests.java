@@ -7,15 +7,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import telran.spring.calculator.controller.CalculatorController;
 import telran.spring.calculator.dto.ArithmeticOperationData;
+import telran.spring.calculator.security.CalculatorSecurityConfiguration;
 
 @WebMvcTest(CalculatorController.class)
+@Import(CalculatorSecurityConfiguration.class)
+@WithMockUser(roles = {"USER", "ADMIN"})
 class CalculatorControllerTests {
 	
 	private static ArithmeticOperationData data;
